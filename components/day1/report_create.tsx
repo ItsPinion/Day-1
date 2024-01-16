@@ -2,7 +2,6 @@
 
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { PopUp } from "./alert";
 import { Result } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarIcon } from "@radix-ui/react-icons";
@@ -37,6 +36,7 @@ import {
 } from "@/components/ui/select";
 import Link from "next/link";
 import { studyTimes } from "@/lib/timeData";
+import { AlertDialogDemo } from "./alert";
 
 export const formSchema = z.object({
   date: z.date(),
@@ -67,30 +67,38 @@ export function ReportForm() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+    // Validate the form data on the client-side before sending the request
+    const reportValidation = formSchema.safeParse(values);
+   
+    if (!reportValidation.success) {
+      // Handle validation errors here
+      console.error(reportValidation.error);
+      return;
+    }
+   
+    // Send the request to the server with the validated data
     try {
       const response = await fetch("/api/report", {
         method: "POST",
-        body: JSON.stringify(values),
+        body: JSON.stringify(reportValidation.data),
         headers: {
           "content-type": "application/json",
         },
       });
       const result: Result = await response.json();
-
+   
       setResult(result)
-
+   
       console.log(response)
       
     } catch (error) {
-      console.error();
+      console.error(error);
     }
-  }
+   }
+   
   return (
     <Form {...form}>
-      {result.message && <PopUp result={result}></PopUp>}
-
+<AlertDialogDemo/>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className={`space-y-8 ${result.success ? "hidden" : ""}`}

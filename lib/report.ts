@@ -1,4 +1,4 @@
-import { eq, gt } from "drizzle-orm";
+import { eq, gt, and } from "drizzle-orm";
 import { reportSchema } from "@/db/schema";
 import { db } from "@/db/db";
 import { ReportType, Result } from "./types";
@@ -23,8 +23,7 @@ export async function createReport(
     tomorrow: newReport.tomorrow,
     bottleneck: newReport.bottleneck,
     time: newReport.time,
-    userID:newReport.userID
-
+    userID: newReport.userID,
   });
   return {
     success: true,
@@ -32,11 +31,14 @@ export async function createReport(
   };
 }
 
-export async function readReportbyDate(date: string): Promise<ReportType[]> {
+export async function readReportbyDate(
+  date: string,
+  userID: string
+): Promise<ReportType[]> {
   const result = await db
     .select()
     .from(reportSchema)
-    .where(eq(reportSchema.date, date));
+    .where(and(eq(reportSchema.date, date), eq(reportSchema.userID, userID)));
 
   return result;
 }

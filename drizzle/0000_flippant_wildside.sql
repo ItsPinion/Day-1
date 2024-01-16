@@ -1,6 +1,6 @@
 CREATE TABLE `report` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-	`date` text DEFAULT CURRENT_DATE NOT NULL,
+	`date` text,
 	`time` text NOT NULL,
 	`today` text NOT NULL,
 	`tomorrow` text NOT NULL,

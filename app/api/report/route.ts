@@ -1,13 +1,14 @@
 import { formSchema } from "@/components/day1/report_create";
 import { createReport, readReportbyDate } from "@/lib/report";
-import { ReportType } from "@/lib/types";
+import { FormSchemaType, ReportType } from "@/lib/types";
 
-export async function POST(request: Request){
-  let body;
+export async function POST(request: Request) {
+  let body: Partial<ReportType>;
 
   try {
     body = await request.json();
   } catch (error) {
+    console.log(error);
     return Response.json(
       { success: false, message: "Invalid json" },
       {
@@ -16,22 +17,31 @@ export async function POST(request: Request){
     );
   }
 
-  const reportValidation = formSchema.safeParse(body);
-
   const headers = new Headers();
   headers.set("content-type", "application/json");
 
-  if (!reportValidation.success) {
-    return Response.json(reportValidation.error.issues[0], {
-      status: 400,
-    });
+  if (
+    !body.date ||
+    !body.today ||
+    !body.tomorrow ||
+    !body.bottleneck ||
+    !body.time ||
+    !body.userID
+  ) {
+    return Response.json(
+      { success: false, message: "Login/Register first brother." },
+      {
+        status: 400,
+      }
+    );
   }
 
   let duplicate: ReportType[];
 
   try {
-    duplicate = await readReportbyDate(reportValidation.data.date.toISOString());
+    duplicate = await readReportbyDate(body.date, body.userID);
   } catch (error) {
+    console.log(error);
     return Response.json(
       {
         success: false,
@@ -42,7 +52,7 @@ export async function POST(request: Request){
       }
     );
   }
-
+  console.log(1);
   if (duplicate[0]) {
     return Response.json(
       {
@@ -55,18 +65,21 @@ export async function POST(request: Request){
     );
   }
 
-  const report:Partial<ReportType>  = {
-    date: reportValidation.data.date.toISOString(),
-    time:reportValidation.data.time,
-    today:reportValidation.data.today,
-    bottleneck:reportValidation.data.bottleneck
-  }
+  const report: Partial<ReportType> = {
+    date: body.date,
+    time: body.time,
+    today: body.today,
+    bottleneck: body.bottleneck,
+    tomorrow: body.tomorrow,
+    userID: body.userID,
+  };
 
   let result;
 
   try {
     result = await createReport(report);
   } catch (error) {
+    console.log(error);
     return Response.json(
       {
         success: false,
