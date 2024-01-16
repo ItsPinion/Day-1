@@ -31,7 +31,7 @@ export async function createReport(
   };
 }
 
-export async function readReportbyDate(
+export async function readReportbyDateandID(
   date: string,
   userID: string
 ): Promise<ReportType[]> {
@@ -43,27 +43,12 @@ export async function readReportbyDate(
   return result;
 }
 
-
-export async function listNotes(
-  page: number,
-  lastID: number,
-  limit: number
+export async function readReportbyUserID(
+  userID: string
 ): Promise<ReportType[]> {
-  let result: ReportType[] = [];
-
-  if (lastID == 0) {
-    result = await db
-      .select()
-      .from(reportSchema)
-      .limit(limit)
-      .offset((page - 1) * limit);
-  } else {
-    result = await db
-      .select()
-      .from(reportSchema)
-      .limit(limit)
-      .where(gt(reportSchema.id, lastID));
-  }
-
+  const result = await db
+    .select()
+    .from(reportSchema)
+    .where(eq(reportSchema.userID, userID));
   return result;
 }

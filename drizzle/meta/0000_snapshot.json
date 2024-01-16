@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "19dc6827-63d4-4384-acc6-d196ebdf0085",
+  "id": "630e59e7-d8cc-4ced-a438-232db99877a4",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "report": {
@@ -18,7 +18,7 @@
           "name": "date",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "time": {

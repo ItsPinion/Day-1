@@ -97,6 +97,7 @@ export function ReportForm() {
           "content-type": "application/json",
         },
       });
+
       const result: Result = await response.json();
 
       setResult(result);
@@ -270,7 +271,7 @@ export function ReportForm() {
         }`}
       >
         {!result.message ? (
-          <div className="space-y-5 space-x-5 justify-center flex flex-row items-center">
+          <div className="space-y-5 space-x-5 justify-center flex flex-col items-center">
             <l-spiral size="40" speed="0.9" color="black"></l-spiral>
             <b className="text-xl">Sending deta to the server.</b>
           </div>

@@ -1,6 +1,6 @@
-import { formSchema } from "@/components/day1/report_create";
-import { createReport, readReportbyDate } from "@/lib/report";
-import { FormSchemaType, ReportType } from "@/lib/types";
+import { formateDate } from "@/lib/formateDate";
+import { createReport, readReportbyDateandID, readReportbyUserID } from "@/lib/report";
+import { ReportType } from "@/lib/types";
 
 export async function POST(request: Request) {
   let body: Partial<ReportType>;
@@ -35,17 +35,21 @@ export async function POST(request: Request) {
     );
   }
 
-  if(!body.userID){return Response.json(
-    { success: false, message: "Didn't send the UserID" },
-    {
-      status: 400,
-    }
-  );}
+  body.date = formateDate(body.date)
+
+  if (!body.userID) {
+    return Response.json(
+      { success: false, message: "Didn't send the UserID" },
+      {
+        status: 400,
+      }
+    );
+  }
 
   let duplicate: ReportType[];
 
   try {
-    duplicate = await readReportbyDate(body.date, body.userID);
+    duplicate = await readReportbyDateandID(body.date, body.userID);
   } catch (error) {
     console.log(error);
     return Response.json(
@@ -58,7 +62,7 @@ export async function POST(request: Request) {
       }
     );
   }
-  console.log(1);
+  
   if (duplicate[0]) {
     return Response.json(
       {

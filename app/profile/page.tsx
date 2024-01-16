@@ -1,6 +1,13 @@
-import { RequestTabs } from "@/components/day1/reportTabs";
+import { Profile } from "./component";
+
+
 
 export default function Home() {
-  return <main className="flex flex-col items-center justify-center min-h-screen pt-12">
-  </main>;
+  
+
+  return (
+    <main className="flex flex-col items-center justify-center min-h-screen p-12 w-fill">
+      <Profile/>
+    </main>
+  );
 }
