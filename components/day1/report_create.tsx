@@ -27,6 +27,16 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useAuth } from "@clerk/nextjs";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import Link from "next/link";
+import { studyTimes } from "@/lib/timeData";
 
 export const formSchema = z.object({
   date: z.date(),
@@ -38,10 +48,13 @@ export const formSchema = z.object({
     message: "Username must be at least 2 characters.",
   }),
   bottleneck: z.string(),
+  userID: z.string(),
 });
 
 export function ReportForm() {
   const [result, setResult] = useState({ success: false, message: "" });
+
+  const user = useAuth();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -49,10 +62,10 @@ export function ReportForm() {
       today: "",
       tomorrow: "",
       bottleneck: "",
+      userID: user.userId || "",
     },
   });
 
-  // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
@@ -64,18 +77,19 @@ export function ReportForm() {
           "content-type": "application/json",
         },
       });
-
       const result: Result = await response.json();
 
-      setResult(result);
+      setResult(result)
+
+      console.log(response)
+      
     } catch (error) {
       console.error();
     }
   }
-
   return (
     <Form {...form}>
-      {result.message !== "" && <PopUp result={result}></PopUp>}
+      {result.message && <PopUp result={result}></PopUp>}
 
       <form
         onSubmit={form.handleSubmit(onSubmit)}
@@ -128,17 +142,24 @@ export function ReportForm() {
           name="time"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>So, how much time did you invest?</FormLabel>
-
-              <FormControl>
-                <Input type="text" placeholder="Your email" {...field} />
-              </FormControl>
-
-              <FormMessage />
+              <FormLabel>How much time did you invest yesterday :</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Drop the digits." />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {studyTimes.map((value, index) => (
+                    <SelectItem key={index} value={value.value}>
+                      {value.value}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="today"
@@ -199,7 +220,9 @@ export function ReportForm() {
           )}
         />
 
-        <Button type="submit">Submit</Button>
+        <Button type="submit" className="w-full">
+          Submit
+        </Button>
       </form>
     </Form>
   );

@@ -1,8 +1,8 @@
 import { formSchema } from "@/components/day1/report_create";
 import { createReport, readReportbyDate } from "@/lib/report";
-import { ReportType, Result } from "@/lib/types";
+import { ReportType } from "@/lib/types";
 
-export async function POST(request: Request) {
+export async function POST(request: Request){
   let body;
 
   try {

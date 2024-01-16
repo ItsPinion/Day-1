@@ -11,16 +11,20 @@ export async function createReport(
     !newReport.today ||
     !newReport.tomorrow ||
     !newReport.bottleneck ||
-    !newReport.time
+    !newReport.time ||
+    !newReport.userID
   ) {
     throw new Error("Fill all the detail");
   }
+
   await db.insert(reportSchema).values({
     date: newReport.date,
-    time: newReport.time,
     today: newReport.today,
     tomorrow: newReport.tomorrow,
     bottleneck: newReport.bottleneck,
+    time: newReport.time,
+    userID:newReport.userID
+
   });
   return {
     success: true,

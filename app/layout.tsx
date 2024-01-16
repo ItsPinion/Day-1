@@ -36,7 +36,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Header />
-            <div className="pt-20">{children}</div>
+            {children}
             <SpeedInsights />
           </ThemeProvider>
         </ClerkProvider>

@@ -1,7 +1,7 @@
 import { sql } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-export const reportSchema = sqliteTable("table", {
+export const reportSchema = sqliteTable("report", {
   id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
   date: text("date")
     .default(sql`CURRENT_DATE`)
@@ -10,4 +10,6 @@ export const reportSchema = sqliteTable("table", {
   today: text("today").notNull(),
   tomorrow: text("tomorrow").notNull(),
   bottleneck: text("bottleneck").notNull(),
+  userID: text("userID").notNull()
 });
+
