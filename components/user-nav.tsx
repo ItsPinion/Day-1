@@ -59,14 +59,14 @@ export async function UserNav() {
           <DropdownMenuItem>New Team</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <a href="/">
+        
           <SignOutButton>
             <DropdownMenuItem>
               Log Out
               <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
             </DropdownMenuItem>
           </SignOutButton>
-        </a>
+       
       </DropdownMenuContent>
     </DropdownMenu>
   );

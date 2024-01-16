@@ -24,7 +24,6 @@ export async function POST(request: Request) {
     !body.date ||
     !body.today ||
     !body.tomorrow ||
-    !body.bottleneck ||
     !body.time ||
     !body.userID
   ) {
@@ -35,6 +34,13 @@ export async function POST(request: Request) {
       }
     );
   }
+
+  if(!body.userID){return Response.json(
+    { success: false, message: "Didn't send the UserID" },
+    {
+      status: 400,
+    }
+  );}
 
   let duplicate: ReportType[];
 
@@ -69,7 +75,7 @@ export async function POST(request: Request) {
     date: body.date,
     time: body.time,
     today: body.today,
-    bottleneck: body.bottleneck,
+    bottleneck: body.bottleneck || "None",
     tomorrow: body.tomorrow,
     userID: body.userID,
   };

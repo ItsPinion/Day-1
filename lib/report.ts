@@ -43,12 +43,6 @@ export async function readReportbyDate(
   return result;
 }
 
-/*
-export async function deleteUserbyEmail(email: string): Promise<Result> {
-  await db.delete(reportSchema).where(eq(reportSchema.email, email));
-  return { success: true, message: "user has been deleted successfully" };
-}
-*/
 
 export async function listNotes(
   page: number,

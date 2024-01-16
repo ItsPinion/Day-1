@@ -26,8 +26,8 @@ export default function RootLayout({
           appearance={{
             baseTheme: dark,
           }}
-          afterSignInUrl="/dashboard/links"
-          afterSignUpUrl="/dashboard/links"
+          afterSignInUrl="/"
+          afterSignUpUrl="/"
         >
           <ThemeProvider
             attribute="class"

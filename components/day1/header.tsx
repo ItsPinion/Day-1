@@ -13,12 +13,18 @@ export function Header() {
           <GiFeather className="h-10 w-10 " />
           <span className="sr-only">Home</span>
         </Link>
+        <div className="space-x-5">
+          <Link href="/">Home</Link>
+          <Link href="/about">About</Link>
+          <Link href="/contact">Contect</Link>
+          <Link href="/report">Report</Link>
+        </div>
 
         <div className="ml-auto flex items-center space-x-4">
-          <Link href="/dashboard/links">
+          <Link href="/profile">
             <Button className="text-sm mx-auto sm:ml-auto space-x-1">
               <LuLayoutDashboard className="h-4 w-4 " />
-              <p>DashBoard</p>
+              <p>Past Reports</p>
             </Button>
           </Link>
           <ModeToggle />

@@ -8,7 +8,8 @@ import { CalendarIcon } from "@radix-ui/react-icons";
 import { addDays, format } from "date-fns";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-
+import { Switch } from "@/components/ui/switch";
+import { spiral } from "ldrs";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -36,16 +37,19 @@ import {
 } from "@/components/ui/select";
 import Link from "next/link";
 import { studyTimes } from "@/lib/timeData";
-import { AlertDialogDemo } from "./alert";
+import { Label } from "../ui/label";
+import { Textarea } from "../ui/textarea";
+import { PopUp } from "./alert";
+spiral.register();
 
 export const formSchema = z.object({
   date: z.date(),
   time: z.string(),
-  today: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+  today: z.string().min(5, {
+    message: "Must be at least 5 characters.",
   }),
-  tomorrow: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+  tomorrow: z.string().min(5, {
+    message: "Must be at least 5 characters.",
   }),
   bottleneck: z.string(),
   userID: z.string(),
@@ -53,7 +57,8 @@ export const formSchema = z.object({
 
 export function ReportForm() {
   const [result, setResult] = useState({ success: false, message: "" });
-
+  const [bottleneck, setBottleneck] = useState(false);
+  const [loading, setLoading] = useState(false);
   const user = useAuth();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -69,13 +74,20 @@ export function ReportForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Validate the form data on the client-side before sending the request
     const reportValidation = formSchema.safeParse(values);
-   
+
     if (!reportValidation.success) {
       // Handle validation errors here
       console.error(reportValidation.error);
+      const result: Result = {
+        success: false,
+        message: reportValidation.error.issues[1].message,
+      };
+
+      setResult(result);
       return;
     }
-   
+
+    setLoading(true);
     // Send the request to the server with the validated data
     try {
       const response = await fetch("/api/report", {
@@ -86,22 +98,20 @@ export function ReportForm() {
         },
       });
       const result: Result = await response.json();
-   
-      setResult(result)
-   
-      console.log(response)
-      
+
+      setResult(result);
+
+      console.log(response);
     } catch (error) {
       console.error(error);
     }
-   }
-   
+  }
+
   return (
     <Form {...form}>
-<AlertDialogDemo/>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className={`space-y-8 ${result.success ? "hidden" : ""}`}
+        className={`space-y-4 ${loading ? "hidden" : ""}`}
       >
         <FormField
           control={form.control}
@@ -176,8 +186,8 @@ export function ReportForm() {
               <FormLabel>What did you study brother/sister?</FormLabel>
 
               <FormControl>
-                <Input
-                  type="text"
+                <Textarea
+                  className="resize-none"
                   placeholder="Write what you already did."
                   {...field}
                 />
@@ -197,8 +207,8 @@ export function ReportForm() {
               </FormLabel>
 
               <FormControl>
-                <Input
-                  type="text"
+                <Textarea
+                  className="resize-none"
                   placeholder="Write what you have in mind."
                   {...field}
                 />
@@ -208,30 +218,92 @@ export function ReportForm() {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="bottleneck"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>So whats the problem?</FormLabel>
 
-              <FormControl>
-                <Input
-                  type="text"
-                  placeholder="Why didnt you f***ing study?"
-                  {...field}
-                />
-              </FormControl>
+        <div className="flex items-center space-x-2">
+          <Switch
+            id="bottleneck-mode"
+            checked={bottleneck}
+            onCheckedChange={setBottleneck}
+          />
+          <Label htmlFor="bottleneck-mode">I have a bottleneck.</Label>
+        </div>
 
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {bottleneck ? (
+          <FormField
+            control={form.control}
+            name="bottleneck"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>So whats the problem?</FormLabel>
 
-        <Button type="submit" className="w-full">
-          Submit
-        </Button>
+                <FormControl>
+                  <Textarea
+                    className="resize-none"
+                    placeholder="Why didnt you f***ing study?"
+                    {...field}
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        ) : (
+          <></>
+        )}
+
+        {user.userId ? (
+          <Button type="submit" className="w-full">
+            Submit
+          </Button>
+        ) : (
+          <div>
+            <Link href="/sign-in">
+              <Button className="w-full">Login first Bozo</Button>
+            </Link>
+          </div>
+        )}
       </form>
+      <div
+        className={` flex flex-row items-center justify-center  ${
+          !loading ? "hidden" : ""
+        }`}
+      >
+        {!result.message ? (
+          <div className="space-y-5 space-x-5 justify-center flex flex-row items-center">
+            <l-spiral size="40" speed="0.9" color="black"></l-spiral>
+            <b className="text-xl">Sending deta to the server.</b>
+          </div>
+        ) : (
+          <div className="space-y-5 space-x-5 justify-center flex flex-col items-center">
+            <PopUp result={result} />
+            {result.success ? (
+              <Button
+                className="pr-2"
+                onClick={() => {
+                  location.reload();
+                }}
+              >
+                Report another?
+              </Button>
+            ) : (
+              <div className="space-y-5 space-x-5 justify-center items-center">
+                <Button
+                  onClick={() => {
+                    setLoading(false);
+                    setResult({ success: false, message: "" });
+                  }}
+                >
+                  Go Back
+                </Button>
+                <Link href="/report">
+                  <Button>Report Problem</Button>
+                </Link>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </Form>
   );
 }
