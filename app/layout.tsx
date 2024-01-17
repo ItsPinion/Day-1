@@ -6,7 +6,7 @@ import { dark } from "@clerk/themes";
 import { Header } from "@/components/day1/header";
 import "./globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-
+import { neobrutalism } from "@clerk/themes";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -25,6 +25,9 @@ export default function RootLayout({
         <ClerkProvider
           appearance={{
             baseTheme: dark,
+            variables: {
+              colorPrimary: "#CF1D44",
+            },
           }}
           afterSignInUrl="/"
           afterSignUpUrl="/"
