@@ -2,9 +2,7 @@
 
 import { CaretSortIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { ColumnDef } from "@tanstack/react-table";
-
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,38 +11,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ReportType } from "@/lib/types";
+import { ReportType, Result } from "@/lib/types";
 
 export const columns: ColumnDef<ReportType>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "bottleneck",
-    header: "Bottleneck",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("bottleneck")}</div>
-    ),
-  },
   {
     accessorKey: "date",
     header: ({ column }) => {
@@ -58,19 +27,24 @@ export const columns: ColumnDef<ReportType>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("date")}</div>
-    ),
+    cell: ({ row }) => <div className="capitalize">{row.getValue("date")}</div>,
   },
+
   {
     accessorKey: "time",
-    header: () => <div className="text-right">Invested Time</div>,
-    cell: ({ row }) => <div className="lowercase">{row.getValue("time")}</div>,
+    header: () => <div className="text-center">Invested Time</div>,
+    cell: ({ row }) => (
+      <div className="lowercase text-center">{row.getValue("time")}</div>
+    ),
   },
+
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
+      const report = row.original;
+      
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -81,15 +55,35 @@ export const columns: ColumnDef<ReportType>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => {}}>
+            <DropdownMenuItem
+              onClick={async () => {
+                try {
+                  const response = await fetch("/api/report", {
+                    method: "DELETE",
+                    body: JSON.stringify({ reportID: report.id }),
+                    headers: {
+                      "content-type": "application/json",
+                    },
+                  });
+
+                  const result: Result = await response.json();
+                  result.success ? location.reload() : alert(result.message+"\nTry another time!");
+                } catch (error) {
+                  console.error(error);
+                }
+              }}
+            >
               Delete Report
+              <p className="mix-blend-screen opacity-50">[Beta]</p>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              Edit Report <p className="mix-blend-screen">[Comming soon]</p>
+              Edit Report
+              <p className="mix-blend-screen opacity-50">[Comming soon]</p>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              View Report <p className="mix-blend-screen">[Comming soon]</p>
+              View Report
+              <p className="mix-blend-screen opacity-50">[Comming soon]</p>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

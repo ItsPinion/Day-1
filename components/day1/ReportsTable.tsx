@@ -2,7 +2,7 @@
 
 import { useAuth } from "@clerk/nextjs";
 import { DataTable } from "./DataTable";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ReportType } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -10,6 +10,32 @@ import Link from "next/link";
 export function Profile() {
   const user = useAuth();
   const [result, setResult] = useState<ReportType[]>([]);
+  const [loading, setLoading] = useState(false);
+
+
+  useEffect(() => {
+    async function getReports(userID: string) {
+      try {
+        const response = await fetch("/api/reports", {
+          method: "POST",
+          body: JSON.stringify({ userID: userID }),
+          headers: {
+            "content-type": "application/json",
+          },
+        });
+
+        const result = await response.json();
+
+        setResult(result.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    if (user.userId) {
+      getReports(user.userId);
+    }
+  }, [user.userId]);
 
   if (!user.userId) {
     return (
@@ -29,30 +55,6 @@ export function Profile() {
       </div>
     );
   }
-
-  async function getReports() {
-    try {
-      const response = await fetch(
-        process.env.URL + "/api/report/" + user.userId,
-        {
-          method: "Get",
-        }
-      );
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const text = await response.text();
-      console.log(text);
-      const result: ReportType[] = JSON.parse(text);
-
-      setResult(result);
-
-      console.log(response);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-  getReports();
 
   return <DataTable reports={result} />;
 }

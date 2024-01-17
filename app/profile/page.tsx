@@ -1,4 +1,4 @@
-import { Profile } from "./component";
+import { Profile } from "../../components/day1/ReportsTable";
 
 
 

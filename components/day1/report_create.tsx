@@ -1,6 +1,5 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { Result } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,7 +15,6 @@ import { Calendar } from "@/components/ui/calendar";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -102,7 +100,6 @@ export function ReportForm() {
 
       setResult(result);
 
-      console.log(response);
     } catch (error) {
       console.error(error);
     }
@@ -161,7 +158,7 @@ export function ReportForm() {
           name="time"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>How much time did you invest yesterday :</FormLabel>
+              <FormLabel>How much time did you invest this day?</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
@@ -184,7 +181,7 @@ export function ReportForm() {
           name="today"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>What did you study brother/sister?</FormLabel>
+              <FormLabel>What did you work on?</FormLabel>
 
               <FormControl>
                 <Textarea
@@ -203,9 +200,7 @@ export function ReportForm() {
           name="tomorrow"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>
-                Whats you gonna study tommorow brother/sister?
-              </FormLabel>
+              <FormLabel>What are you going to study the next day?</FormLabel>
 
               <FormControl>
                 <Textarea
@@ -265,46 +260,53 @@ export function ReportForm() {
           </div>
         )}
       </form>
-      <div
-        className={` flex flex-row items-center justify-center  ${
-          !loading ? "hidden" : ""
-        }`}
-      >
-        {!result.message ? (
-          <div className="space-y-5 space-x-5 justify-center flex flex-col items-center">
-            <l-spiral size="40" speed="0.9" color="black"></l-spiral>
-            <b className="text-xl">Sending deta to the server.</b>
-          </div>
-        ) : (
-          <div className="space-y-5 space-x-5 justify-center flex flex-col items-center">
-            <PopUp result={result} />
-            {result.success ? (
-              <Button
-                className="pr-2"
-                onClick={() => {
-                  location.reload();
-                }}
-              >
-                Report another?
-              </Button>
-            ) : (
-              <div className="space-y-5 space-x-5 justify-center items-center">
-                <Button
-                  onClick={() => {
-                    setLoading(false);
-                    setResult({ success: false, message: "" });
-                  }}
-                >
-                  Go Back
-                </Button>
-                <Link href="/report">
-                  <Button>Report Problem</Button>
-                </Link>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
+      {loading ? (
+        <div className={` flex flex-row items-center justify-center `}>
+          {!result.message ? (
+            <div className="space-y-5 space-x-5 justify-center flex flex-col items-center">
+              <l-spiral size="40" speed="0.9" color="black"></l-spiral>
+              <b className="text-xl">Sending deta to the server.</b>
+            </div>
+          ) : (
+            <div className="space-y-5 space-x-5 justify-center flex flex-col items-center">
+              <PopUp result={result} />
+
+              {result.success ? (
+                <div className="space-x-5 items-end justify-end flex flex-row ">
+                  <Button
+                    onClick={() => {
+                      form.reset();
+                      setLoading(false);
+                      setResult({ success: false, message: "" });
+                    }}
+                  >
+                    Report another?
+                  </Button>
+                  <Link href="/profile">
+                    <Button>Reports History</Button>
+                  </Link>
+                </div>
+              ) : (
+                <div className="space-y-5 space-x-5 justify-center items-center ">
+                  <Button
+                    onClick={() => {
+                      setLoading(false);
+                      setResult({ success: false, message: "" });
+                    }}
+                  >
+                    Go Back
+                  </Button>
+                  <Link href="/report">
+                    <Button>Report Problem</Button>
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      ) : (
+        <></>
+      )}
     </Form>
   );
 }

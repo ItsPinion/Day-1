@@ -1,5 +1,10 @@
 import { formateDate } from "@/lib/formateDate";
-import { createReport, readReportbyDateandID, readReportbyUserID } from "@/lib/report";
+import {
+  createReport,
+  deleteUserbyID,
+  readReportbyDateandID,
+  readReportbyUserID,
+} from "@/lib/report";
 import { ReportType } from "@/lib/types";
 
 export async function POST(request: Request) {
@@ -35,7 +40,7 @@ export async function POST(request: Request) {
     );
   }
 
-  body.date = formateDate(body.date)
+  body.date = formateDate(body.date);
 
   if (!body.userID) {
     return Response.json(
@@ -62,7 +67,7 @@ export async function POST(request: Request) {
       }
     );
   }
-  
+
   if (duplicate[0]) {
     return Response.json(
       {
@@ -88,6 +93,53 @@ export async function POST(request: Request) {
 
   try {
     result = await createReport(report);
+  } catch (error) {
+    console.log(error);
+    return Response.json(
+      {
+        success: false,
+        message: "Failed to access the database",
+      },
+      {
+        status: 500,
+      }
+    );
+  }
+
+  return Response.json(result);
+}
+
+export async function DELETE(request: Request) {
+  let body: { reportID: number };
+
+  try {
+    body = await request.json();
+  } catch (error) {
+    console.log(error);
+    return Response.json(
+      { success: false, message: "Invalid json" },
+      {
+        status: 400,
+      }
+    );
+  }
+
+  const headers = new Headers();
+  headers.set("content-type", "application/json");
+
+  if (!body.reportID) {
+    return Response.json(
+      { success: false, message: "Didn't send the UserID" },
+      {
+        status: 400,
+      }
+    );
+  }
+
+  let result;
+
+  try {
+    result = await deleteUserbyID(body.reportID);
   } catch (error) {
     console.log(error);
     return Response.json(

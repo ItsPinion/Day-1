@@ -52,3 +52,8 @@ export async function readReportbyUserID(
     .where(eq(reportSchema.userID, userID));
   return result;
 }
+
+export async function deleteUserbyID(id: number): Promise<Result> {
+  await db.delete(reportSchema).where(eq(reportSchema.id, id));
+  return { success: true, message: "Report has been deleted successfully" };
+}
