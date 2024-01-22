@@ -70,11 +70,9 @@ export function ReportForm() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Validate the form data on the client-side before sending the request
     const reportValidation = formSchema.safeParse(values);
 
     if (!reportValidation.success) {
-      // Handle validation errors here
       console.error(reportValidation.error);
       const result: Result = {
         success: false,
@@ -84,9 +82,7 @@ export function ReportForm() {
       setResult(result);
       return;
     }
-
     setLoading(true);
-    // Send the request to the server with the validated data
     try {
       const response = await fetch("/api/report", {
         method: "POST",
@@ -272,22 +268,23 @@ export function ReportForm() {
               <PopUp result={result} />
 
               {result.success ? (
-                <div className="space-x-5 items-end justify-end flex flex-row ">
-                  <Button
-                    onClick={() => {
-                      form.reset();
-                      setLoading(false);
-                      setResult({ success: false, message: "" });
-                    }}
-                  >
-                    Report another?
-                  </Button>
-                  <Link href="/profile">
-                    <Button>Reports History</Button>
-                  </Link>
-                </div>
+              <div className="flex  space-x-6">
+              <Link href="/profile">
+                 <Button>Reports History</Button>
+              </Link>
+              <Button
+                 onClick={() => {
+                   form.reset();
+                   setLoading(false);
+                   setResult({ success: false, message: "" });
+                 }}
+              >
+                 Report another?
+              </Button>
+             </div>
+             
               ) : (
-                <div className="space-y-5 space-x-5 justify-center items-center ">
+                <div className="flex  space-x-6">
                   <Button
                     onClick={() => {
                       setLoading(false);

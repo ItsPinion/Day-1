@@ -9,7 +9,7 @@ import { ReportForm } from "./report_create";
 
 export function RequestTabs() {
   return (
-    <Tabs defaultValue="report" className="w-[400px]">
+    <Tabs defaultValue="report" >
       <TabsContent value="report">
         <Card>
           <CardHeader>

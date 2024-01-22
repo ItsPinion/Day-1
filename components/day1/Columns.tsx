@@ -27,7 +27,7 @@ export const columns: ColumnDef<ReportType>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="capitalize">{row.getValue("date")}</div>,
+    cell: ({ row }) => <div className="capitalize ">{row.getValue("date")}</div>,
   },
 
   {
@@ -74,16 +74,16 @@ export const columns: ColumnDef<ReportType>[] = [
               }}
             >
               Delete Report
-              <p className="mix-blend-screen opacity-50">[Beta]</p>
+              <p className="mix-blend-screen opacity-50 p-1">[Beta]</p>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               Edit Report
-              <p className="mix-blend-screen opacity-50">[Comming soon]</p>
+              <p className="mix-blend-screen opacity-50 p-1">[Comming soon]</p>
             </DropdownMenuItem>
             <DropdownMenuItem>
               View Report
-              <p className="mix-blend-screen opacity-50">[Comming soon]</p>
+              <p className="mix-blend-screen opacity-50 p-1">[Comming soon]</p>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

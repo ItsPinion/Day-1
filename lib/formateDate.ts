@@ -1,13 +1,11 @@
-export function formateDate(date: string) {
-    let dateStr = date;
-    let dateObj = new Date(dateStr);
-    
-    let formattedDate = dateObj.toLocaleDateString('en-US', {
-       year: 'numeric', 
-       month: 'long', 
-       day: 'numeric'
-    });
-    
-    return (formattedDate);
-    
-}
+export function formatDate(inputDateString: string, daysToAdd: number = 1): string {
+    const inputDate = new Date(inputDateString);
+  
+    // Add days
+    inputDate.setDate(inputDate.getDate() + daysToAdd);
+  
+    const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+    const formattedDate = inputDate.toLocaleDateString('en-US', options);
+  
+    return formattedDate;
+  }

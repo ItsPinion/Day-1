@@ -1,4 +1,4 @@
-import { formateDate } from "@/lib/formateDate";
+import { formatDate } from "@/lib/formateDate";
 import {
   createReport,
   deleteUserbyID,
@@ -22,6 +22,8 @@ export async function POST(request: Request) {
     );
   }
 
+  console.log(body)
+
   const headers = new Headers();
   headers.set("content-type", "application/json");
 
@@ -40,7 +42,7 @@ export async function POST(request: Request) {
     );
   }
 
-  body.date = formateDate(body.date);
+  body.date = formatDate(body.date);
 
   if (!body.userID) {
     return Response.json(

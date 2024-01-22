@@ -63,8 +63,8 @@ export function DataTable({reports}:{reports:ReportType[]}) {
     })
   
     return (
-      <div className="w-full">
-        <div className="flex items-center py-4">
+      <div>
+        <div className="flex items-center py-4 gap-x-4">
           <Input
             placeholder="Filter Date..."
             value={(table.getColumn("date")?.getFilterValue() as string) ?? ""}
