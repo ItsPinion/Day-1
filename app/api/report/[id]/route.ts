@@ -1,39 +1,17 @@
-import {
-    readReportbyUserID
-} from "@/lib/report";
+import { readReportbyUserID } from "@/lib/report";
 import { ReportType } from "@/lib/types";
 
-export async function POST(request: Request) {
-  let body: { userID: string };
-
-  try {
-    body = await request.json();
-  } catch (error) {
-    console.log(error);
-    return Response.json(
-      { success: false, message: "Invalid json", data: [] },
-      {
-        status: 400,
-      }
-    );
-  }
-
+export async function GET(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
   const headers = new Headers();
   headers.set("content-type", "application/json");
-
-  if (!body.userID) {
-    return Response.json(
-      { success: false, message: "Did you login?", data: [] },
-      {
-        status: 400,
-      }
-    );
-  }
 
   let reports: ReportType[] = [];
 
   try {
-    reports = await readReportbyUserID(body.userID);
+    reports = await readReportbyUserID(params.id);
   } catch (error) {
     console.log(error);
     return Response.json(
@@ -63,12 +41,12 @@ export async function POST(request: Request) {
 
   return Response.json(
     {
-      success: false,
-      message: "No report Found!",
+      success: true,
+      message: "Successfully found all reports!",
       data: reports,
     },
     {
-      status: 400,
+      status: 200,
     }
   );
 }

@@ -10,21 +10,13 @@ import Link from "next/link";
 export function Profile() {
   const user = useAuth();
   const [result, setResult] = useState<ReportType[]>([]);
-  const [loading, setLoading] = useState(false);
-
 
   useEffect(() => {
     async function getReports(userID: string) {
       try {
-        const response = await fetch("/api/reports", {
-          method: "POST",
-          body: JSON.stringify({ userID: userID }),
-          headers: {
-            "content-type": "application/json",
-          },
-        });
-
-        const result = await response.json();
+        const result = await fetch(`/api/report/${userID}`)
+          .then((x) => x.json())
+          .catch((e) => console.error(e));
 
         setResult(result.data);
       } catch (error) {
