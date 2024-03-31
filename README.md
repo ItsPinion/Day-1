@@ -1,41 +1,88 @@
-![Version](https://img.shields.io/badge/version-1.0.2-purple)
-![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+# Day1: Your Daily Reporting Tool
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+![Version](https://img.shields.io/badge/version-1.0.0-purple.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+
+[![Day1 Front Page](https://i.ibb.co/x8Dgt0X/644ad29d-bd30-4f3b-9021-f4d04b8dafc1.png)](https://day1.24-7.ro)
+
+> **Warning** This project is still in development and is not nearly good enough for production use.
+> 
+> It uses new technologies (drizzle ORM) which are subject to change and may break your application.
+
+## Introduction
+
+Welcome to **Day1**, an open source daily reporting tool designed to revolutionize how you track your progress, manage your time, and reflect on your daily activities. Build with everything new in **Next.js 14**.
+
+## Features
+
+- **Daily Reporting**: Effortlessly log your daily activities, time invested, and goals for the next day.
+- **Bottleneck Identification**: Identify and address any bottlenecks that might be affecting your productivity.
+- **Data Visualization**: View your reports in a structured and visually appealing format.
+- **User Authentication**: Secure your reports with user authentication, ensuring only you can access your data.
+- **Responsive Design**: Access your reports from anywhere, on any device.
+- **Integrated Analytics**: Gain insights into your productivity patterns and areas for improvement.
+
+## Technologies Used
+
+- **Frontend**: Built with [React](https://react.dev/), utilizing the [Shadcn UI](https://ui.shadcn.com/) library for a modern and responsive UI.
+- **Backend**: Powered by Next.js, with server-side rendering for optimal performance.
+- **Database**: Uses SQLite by [Turso](https://turso.tech/), managed through [Drizzle ORM](https://orm.drizzle.team/) for efficient data operations.
+- **Authentication**: Integrates with [Clerk](https://clerk.com/) for secure user authentication.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Node.js (v14.0.0 or later)
+- npm (v6.0.0 or later)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Clone the repository:
+   ```
+   git clone https://github.com/ItsPinion/Day-1.git
+   ```
+2. Navigate to the project directory:
+   ```
+   cd Day-1
+   ```
+3. Install the dependencies:
+   ```
+   npm install
+   ```
+4. Set up your environment variables in `.env.local` based on the [.env.local.example](.env.local.example) file provided.
+5. Start the development server:
+   ```
+   npm run dev
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Usage
 
-## Learn More
+- Visit `http://localhost:3000` to view the application.
+- Navigate to the report creation page to start logging your daily activities.
+- Access your past reports from the profile section to review your progress.
 
-To learn more about Next.js, take a look at the following resources:
+## Contributing
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Contributions are welcome! Please feel free to submit a pull request or open an issue if you find any bugs or have suggestions for improvements.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## License
 
-## Deploy on Vercel
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Live Demo
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Experience Day1 live at [https://day1.24-7.ro/](https://day1.24-7.ro/).
 
-[![Alt text](https://i.ibb.co/x8Dgt0X/644ad29d-bd30-4f3b-9021-f4d04b8dafc1.png)](https://day1.24-7.ro)
+## Contact
+
+For any questions or feedback, please contact the project maintainer(ME) at our discord server [Pinion's Nest](https://discord.gg/XnzQUw3FPR).
+
+## Acknowledgments
+
+- The [Shadcn UI](https://ui.shadcn.com/) library for providing a modern and clean UI.
+- [Clerk](https://clerk.com/) for handling authentication and user sessions.
+- [Drizzle ORM](https://orm.drizzle.team/) for efficient data management.
+- The open-source community for their contributions and support.
+
+---
